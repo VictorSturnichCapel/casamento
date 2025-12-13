@@ -238,10 +238,62 @@
             word-break: break-all;
         }
 
+        /* --- NOVO: MODAL DO PIX --- */
+        .modal-overlay {
+            display: none; /* Escondido por padrão */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+            animation: popIn 0.3s ease;
+        }
+        @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        
+        .close-btn { position: absolute; top: 15px; right: 20px; font-size: 24px; cursor: pointer; color: #999; }
+        .qr-canvas { margin: 20px 0; border: 10px solid white; box-shadow: 0 0 10px rgba(0,0,0,0.1); border-radius: 10px; }
+        .pix-code-box { background: #f4f4f4; padding: 10px; font-family: monospace; font-size: 0.8rem; word-break: break-all; border-radius: 5px; margin-bottom: 15px; border: 1px dashed #ccc; cursor: pointer; }
+        .btn-copiar { background: #ddd; border: none; padding: 5px 10px; border-radius: 4px; font-size: 0.8rem; cursor: pointer; margin-bottom: 20px; }
+
         .loading-msg { text-align: center; color: #999; margin: 20px 0; font-style: italic;}
     </style>
 </head>
 <body>
+
+    <div id="modal-pix" class="modal-overlay">
+        <div class="modal-content">
+            <span class="close-btn" onclick="fecharModal()">&times;</span>
+            <h3 id="modal-titulo" style="color:var(--cor-titulo); margin-top:0;">Pagamento Pix</h3>
+            <p id="modal-valor" style="font-weight:bold; font-size:1.2rem; margin: 5px 0;">R$ 0,00</p>
+            
+            <canvas id="qr-code" class="qr-canvas"></canvas>
+            
+            <p style="font-size:0.9rem; color:#666;">Escaneie ou copie o código abaixo:</p>
+            
+            <div id="pix-copia-cola" class="pix-code-box" onclick="copiarPix()" title="Clique para copiar"></div>
+            <button class="btn-copiar" onclick="copiarPix()">Copiar Código</button>
+
+            <hr style="border:0; border-top:1px solid #eee; margin:20px 0;">
+
+            <button id="btn-zap-confirmar" class="btn-zap">✅ Já paguei! Enviar comprovante</button>
+        </div>
+    </div>
 
     <header>
         <h1>Ana & Victor</h1>
@@ -286,58 +338,158 @@
         </div>
 
     </div>
-
+    
+    <div style="max-width: 800px; margin: 0 auto 50px; padding: 0 20px;">
+        <h2 class="section-title" style="text-align: center; margin-top: 40px;">Vibe da Festa 🎵</h2>
+        
+        <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/playlist/4JX4Vu7GGnjfSoB2waPyLK?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+    </div>
+    
     <div class="pix-section">
         <h3>Como Presentear?</h3>
-        <p>1. Escolha o item e clique em "Presentear" para nos avisar no WhatsApp.</p>
-        <p>2. Faça o Pix usando a chave abaixo:</p>
+        <p>1. Escolha o item e clique em "Presentear". Uma janela com QR Code abrirá.</p>
+        <p>2. Se preferir fazer manual, nossa chave é:</p>
         
         <div class="pix-box">
-            seu.email@pix.com
+            998531136
         </div>
         <p>Titular: Ana / Victor</p>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
 
     <script>
         // ======================= CONFIGURAÇÕES =======================
         
+        // 1. DADOS PIX (ATENÇÃO: Mude aqui se não for esse número)
+        const chavePix = "998531136"; 
+        const nomeBeneficiario = "VICTOR CAPEL"; // Sem acentos, max 25 chars
+        const cidadeBeneficiario = "SAO PAULO"; // Sem acentos
+
         // ID da Planilha
         const sheetID = '1NryZ06jny6ugQ4Fefnr0c5KYZWKz8qDJfeaDBVQ_pJI';
 
-        // 1. Link Aba Presentes (gid=0)
+        // Links CSV
         const csvPresentes = `https://docs.google.com/spreadsheets/d/${sheetID}/export?format=csv&gid=0`;
-
-        // 2. Link Aba Comentários (gid=608484924)
         const csvComentarios = `https://docs.google.com/spreadsheets/d/${sheetID}/export?format=csv&gid=608484924`;
 
-        // 3. Script Google
+        // Script Google (Versão 2 - Anyone)
         const scriptURL = 'https://script.google.com/macros/s/AKfycbx8RdusMGjQheRzmekbOLSjtiImzheuQXI2ULamloP-X7dFONkmJquSX1IMzmUsv-w_5w/exec';
 
-        // 4. WhatsApp (Coloquei o número que você passou com DDD 11)
-        // Se o DDD não for 11, altere aqui.
+        // WhatsApp
         const telefoneNoivos = '5511998531136';
 
-        // 5. Datas Importantes
+        // Datas
         const dataNamoro = new Date("2019-03-09T00:00:00");
         const dataFesta = new Date("2026-11-28T00:00:00");
 
         // =============================================================
 
+        // --- GERADOR DE PIX (PAYLOAD) ---
+        class Pix {
+            constructor(chave, nome, cidade, valor, mensagem) {
+                this.chave = chave;
+                this.nome = this.limparTexto(nome, 25);
+                this.cidade = this.limparTexto(cidade, 15);
+                this.valor = valor.toFixed(2);
+                this.mensagem = this.limparTexto(mensagem || "", 50);
+            }
+            limparTexto(texto, max) {
+                return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase().substring(0, max);
+            }
+            formatar(id, valor) {
+                const len = valor.length.toString().padStart(2, "0");
+                return `${id}${len}${valor}`;
+            }
+            gerarPayload() {
+                const payloadKey = `0014BR.GOV.BCB.PIX01${this.chave.length.toString().padStart(2, "0")}${this.chave}`;
+                let payload = 
+                    this.formatar("00", "01") +
+                    this.formatar("26", payloadKey) +
+                    this.formatar("52", "0000") +
+                    this.formatar("53", "986") +
+                    this.formatar("54", this.valor) +
+                    this.formatar("58", "BR") +
+                    this.formatar("59", this.nome) +
+                    this.formatar("60", this.cidade) +
+                    this.formatar("62", this.formatar("05", this.mensagem || "***")) +
+                    "6304";
+                return payload + this.crc16(payload);
+            }
+            crc16(payload) {
+                let crc = 0xFFFF;
+                for (let i = 0; i < payload.length; i++) {
+                    crc ^= payload.charCodeAt(i) << 8;
+                    for (let j = 0; j < 8; j++) {
+                        if ((crc & 0x8000) !== 0) crc = (crc << 1) ^ 0x1021;
+                        else crc = crc << 1;
+                    }
+                }
+                return (crc & 0xFFFF).toString(16).toUpperCase().padStart(4, "0");
+            }
+        }
+
+        // --- FUNÇÕES DO MODAL ---
+        const modal = document.getElementById('modal-pix');
+
+        function abrirModalPix(item, valorStr) {
+            // Converte "150,00" para 150.00
+            let valorNumerico = parseFloat(valorStr.replace('R$', '').replace('.', '').replace(',', '.').trim());
+            if(isNaN(valorNumerico)) valorNumerico = 0;
+
+            // Gera código Pix
+            const pix = new Pix(chavePix, nomeBeneficiario, cidadeBeneficiario, valorNumerico, `Presente ${item}`);
+            const payload = pix.gerarPayload();
+
+            // Desenha QR Code
+            const qr = new QRious({
+                element: document.getElementById('qr-code'),
+                value: payload,
+                size: 200,
+                level: 'M'
+            });
+
+            // Preenche textos
+            document.getElementById('modal-titulo').innerText = item;
+            document.getElementById('modal-valor').innerText = `R$ ${valorStr}`;
+            document.getElementById('pix-copia-cola').innerText = payload;
+
+            // Configura botão WhatsApp
+            const btnZap = document.getElementById('btn-zap-confirmar');
+            btnZap.onclick = function() {
+                const texto = `Olá Ana e Victor! Escolhi presentear com: *${item}* (R$ ${valorStr}). Acabei de pagar via Pix!`;
+                window.open(`https://wa.me/${telefoneNoivos}?text=${encodeURIComponent(texto)}`, '_blank');
+            };
+
+            // Mostra janela
+            modal.style.display = "flex";
+        }
+
+        function fecharModal() {
+            modal.style.display = "none";
+        }
+
+        function copiarPix() {
+            const codigo = document.getElementById('pix-copia-cola').innerText;
+            navigator.clipboard.writeText(codigo).then(() => {
+                alert("Código Pix copiado! Cole no app do seu banco.");
+            });
+        }
+        
+        window.onclick = function(event) {
+            if (event.target == modal) fecharModal();
+        }
+
         // --- LÓGICA DE DATAS ---
         function atualizarContadores() {
             const agora = new Date();
-
-            // 1. Tempo de Namoro
             const diferencaNamoro = agora - dataNamoro;
             const diasNamoro = Math.floor(diferencaNamoro / (1000 * 60 * 60 * 24));
             const anos = Math.floor(diasNamoro / 365);
             const meses = Math.floor((diasNamoro % 365) / 30);
-            
             document.getElementById('tempo-namoro').innerText = `${anos} anos e ${meses} meses`;
 
-            // 2. Contagem Regressiva Festa
             const diferencaFesta = dataFesta - agora;
             if (diferencaFesta > 0) {
                 const diasFalta = Math.floor(diferencaFesta / (1000 * 60 * 60 * 24));
@@ -346,11 +498,9 @@
                 document.getElementById('tempo-festa').innerText = "É hoje! 🎉";
             }
         }
-        // Atualiza assim que carrega
         atualizarContadores();
 
-
-        // --- CARREGAR PRESENTES ---
+        // --- CARREGAR PRESENTES (COM MODAL) ---
         function carregarPresentes() {
             Papa.parse(csvPresentes, {
                 download: true, header: true, skipEmptyLines: true,
@@ -367,6 +517,8 @@
 
                         const card = document.createElement('div');
                         card.className = 'card';
+                        
+                        // Botão agora chama o Modal
                         card.innerHTML = `
                             <img src="${foto}" class="card-img" onerror="this.src='https://via.placeholder.com/300?text=Sem+Foto'">
                             <div class="card-body">
@@ -375,7 +527,7 @@
                                     <div class="card-cotas">${cotas}</div>
                                     <div class="card-price">R$ ${item.Valor}</div>
                                 </div>
-                                <button onclick="enviarZap('${item.Item}', '${item.Valor}')" class="btn-zap">🎁 Presentear</button>
+                                <button onclick="abrirModalPix('${item.Item}', '${item.Valor}')" class="btn-zap">🎁 Presentear</button>
                             </div>
                         `;
                         container.appendChild(card);
@@ -403,12 +555,10 @@
                         if (!msg.Nome || !msg.Mensagem) return;
                         const div = document.createElement('div');
                         div.className = 'recado-item';
-                        
                         let dataFormatada = "";
                         if (msg.Data) {
                             try { let d = new Date(msg.Data); if(!isNaN(d)) dataFormatada = d.toLocaleDateString('pt-BR'); } catch (e) {}
                         }
-
                         div.innerHTML = `<strong>${msg.Nome} <span class="data">${dataFormatada}</span></strong><p>${msg.Mensagem}</p>`;
                         container.appendChild(div);
                     });
@@ -445,12 +595,6 @@
                     btnEnviar.innerText = "Enviar Mensagem";
                 });
         });
-
-        function enviarZap(item, valor) {
-            const texto = `Olá Ana e Victor! Escolhi presentear com: *${item}* (R$ ${valor}). Segue o comprovante!`;
-            const url = `https://wa.me/${telefoneNoivos}?text=${encodeURIComponent(texto)}`;
-            window.open(url, '_blank');
-        }
 
         carregarPresentes();
         carregarComentarios();
