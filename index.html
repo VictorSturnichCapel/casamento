@@ -98,7 +98,7 @@
     </header>
 
     <div class="container">
-        
+
         <h2 class="section-title">Lista de Presentes 🎁</h2>
         <div id="loading-presentes" class="loading-msg">Carregando lista...</div>
         <div class="grid" id="lista-presentes"></div>
@@ -128,40 +128,39 @@
                 <div class="loading-msg">Carregando recadinhos...</div>
             </div>
         </div>
-    </div>
 
-    <div class="form-section" style="border-left: 5px solid var(--cor-titulo);">
-        <h2 class="section-title" style="margin-top:0; text-align: center;">Confirme sua Presença ✨</h2>
-        <p style="text-align:center; margin-bottom:30px; color:#666;">Por favor, confirme até dia 20/11/2026 para organizarmos tudo com carinho.</p>
-        
-        <form name="form-presenca">
-            <input type="hidden" name="tipo" value="Presenca">
-
-            <label style="font-weight:bold;">Nome Completo:</label>
-            <input name="Nome" type="text" placeholder="Ex: Ana Maria e Família" required>
-
-            <div class="rsvp-grid">
-                <div>
-                    <label style="font-weight:bold;">Adultos:</label>
-                    <input name="Adultos" type="number" min="1" value="1" required>
+        <div class="form-section" style="border-left: 5px solid var(--cor-titulo);">
+            <h2 class="section-title" style="margin-top:0; text-align: center;">Confirme sua Presença ✨</h2>
+            <p style="text-align:center; margin-bottom:30px; color:#666;">Por favor, confirme até dia 20/11/2026 para organizarmos tudo com carinho.</p>
+            
+            <form name="form-presenca">
+                <input type="hidden" name="tipo" value="Presenca">
+    
+                <label style="font-weight:bold;">Nome Completo:</label>
+                <input name="Nome" type="text" placeholder="Ex: Ana Maria e Família" required>
+    
+                <div class="rsvp-grid">
+                    <div>
+                        <label style="font-weight:bold;">Adultos:</label>
+                        <input name="Adultos" type="number" min="1" value="1" required>
+                    </div>
+                    <div>
+                        <label style="font-weight:bold;">Crianças:</label>
+                        <input name="Criancas" type="number" min="0" value="0">
+                    </div>
                 </div>
-                <div>
-                    <label style="font-weight:bold;">Crianças:</label>
-                    <input name="Criancas" type="number" min="0" value="0">
+    
+                <label style="font-weight:bold;">Você vai ao evento?</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="Confirmacao" value="Sim" checked> Sim, estarei lá!</label>
+                    <label><input type="radio" name="Confirmacao" value="Nao"> Infelizmente não poderei ir.</label>
                 </div>
-            </div>
-
-            <label style="font-weight:bold;">Você vai ao evento?</label>
-            <div class="radio-group">
-                <label><input type="radio" name="Confirmacao" value="Sim" checked> Sim, estarei lá!</label>
-                <label><input type="radio" name="Confirmacao" value="Nao"> Infelizmente não poderei ir.</label>
-            </div>
-
-            <button type="submit" class="btn-post" id="btn-rsvp">Enviar Confirmação</button>
-        </form>
-        <p id="msg-rsvp" style="display:none; text-align:center; margin-top:15px; font-weight:bold; color:green;"></p>
+    
+                <button type="submit" class="btn-post" id="btn-rsvp">Enviar Confirmação</button>
+            </form>
+            <p id="msg-rsvp" style="display:none; text-align:center; margin-top:15px; font-weight:bold; color:green;"></p>
+        </div>
     </div>
-
     <div class="pix-section">
         <h3>Como Presentear?</h3>
         <p>1. Escolha o item e clique em "Presentear". Uma janela com QR Code abrirá.</p>
