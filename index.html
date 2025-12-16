@@ -70,6 +70,15 @@
         .pix-code-box { background: #f4f4f4; padding: 10px; font-family: monospace; font-size: 0.8rem; word-break: break-all; border-radius: 5px; margin-bottom: 15px; border: 1px dashed #ccc; cursor: pointer; }
         .btn-copiar { background: #ddd; border: none; padding: 5px 10px; border-radius: 4px; font-size: 0.8rem; cursor: pointer; margin-bottom: 20px; }
         .loading-msg { text-align: center; color: #999; margin: 20px 0; font-style: italic;}
+        @media (max-width: 600px) {
+            .radio-group {
+                display: flex;
+                gap: 5%;
+                margin-bottom: 15px;
+                align-items: flex-start;
+                flex-direction: column;
+            }
+        }
     </style>
 </head>
 <body>
