@@ -1,6 +1,6 @@
 # 💍 Site de Casamento - Ana & Victor
 
-Este é o site oficial para o casamento de Ana & Victor. O projeto é um site estático(frontend-only) moderno e responsivo, focado em interatividade e facilidade para os convidados, com integração direta ao Google Sheets para gerenciamento de dados.
+Este é o site oficial para o casamento de Ana & Victor. O projeto é um site estático (frontend-only) moderno e responsivo, focado em interatividade e facilidade para os convidados, com integração direta ao Google Sheets para gerenciamento de dados.
 
 ## 🚀 Funcionalidades
 
