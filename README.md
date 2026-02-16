@@ -15,6 +15,7 @@ Este é o site oficial para o casamento de Ana & Victor. O projeto é um site es
 
 ## 📂 Estrutura de Arquivos
 
+
 O projeto foi refatorado para separar responsabilidades e facilitar a manutenção:
 
 ```text
