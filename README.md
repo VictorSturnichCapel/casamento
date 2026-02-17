@@ -30,4 +30,3 @@ O projeto foi refatorado para separar responsabilidades e facilitar a manutenç�
 └── js/
     ├── config.js       # CONFIGURAÇÕES (Edite seus dados aqui)
     └── script.js       # Lógica do site (Não edite a menos que necessário)
-
