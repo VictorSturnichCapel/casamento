@@ -15,7 +15,6 @@ Este é o site oficial para o casamento de Ana & Victor. O projeto é um site es
 
 ## 📂 Estrutura de Arquivos
 
-
 O projeto foi refatorado para separar responsabilidades e facilitar a manutenção:
 
 ```text
@@ -30,3 +29,4 @@ O projeto foi refatorado para separar responsabilidades e facilitar a manutenç�
 └── js/
     ├── config.js       # CONFIGURAÇÕES (Edite seus dados aqui)
     └── script.js       # Lógica do site (Não edite a menos que necessário)
+
