@@ -251,3 +251,17 @@ function abrirModalPix(item, valorStr) {
 
     modal.style.display = "flex";
 }
+
+// Tempo total da introdução em milissegundos (16s da animação + 1s do fade out)
+    const tempoDaIntro = 17000; 
+
+  setTimeout(() => {
+    // Restaura o scroll do site principal
+    document.body.style.overflow = 'auto';
+    
+    // Remove a camada de introdução completamente
+    const intro = document.getElementById('intro-sequencia');
+    if (intro) {
+      intro.remove();
+    }
+  }, tempoDaIntro);
