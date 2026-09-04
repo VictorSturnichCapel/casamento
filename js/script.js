@@ -144,6 +144,10 @@ function carregarPresentes() {
                 let foto = item.Foto && item.Foto.startsWith('http') ? item.Foto : 'https://images.unsplash.com/photo-1513201099705-a9746e1e201f?auto=format&fit=crop&w=500&q=60';
                 let cotas = item.Cotas ? `${item.Cotas} cotas` : "Disponível";
                 if (item.Cotas === "0") cotas = "Esgotado";
+                const linkCompra = obterLinkCompra(item);
+                const acao = linkCompra
+                    ? `<a class="btn-zap js-link-compra" href="${escaparHtml(linkCompra)}" target="_blank" rel="noopener noreferrer">🛒 Comprar presente</a>`
+                    : `<button class="btn-zap js-btn-presentear" data-item="${escaparHtml(item.Item)}" data-valor="${escaparHtml(item.Valor)}">🎁 Presentear</button>`;
 
                 const card = document.createElement('div');
                 card.className = 'card';
@@ -157,18 +161,42 @@ function carregarPresentes() {
                             <div class="card-cotas">${cotas}</div>
                             <div class="card-price">R$ ${item.Valor}</div>
                         </div>
-                        <button class="btn-zap js-btn-presentear" data-item="${item.Item}" data-valor="${item.Valor}">🎁 Presentear</button>
+                        ${acao}
                     </div>`;
                 
                 // Adiciona evento ao botão recém criado
-                card.querySelector('.js-btn-presentear').addEventListener('click', function() {
-                    abrirModalPix(this.dataset.item, this.dataset.valor);
-                });
+                const botaoPresentear = card.querySelector('.js-btn-presentear');
+                if (botaoPresentear) {
+                    botaoPresentear.addEventListener('click', function() {
+                        abrirModalPix(this.dataset.item, this.dataset.valor);
+                    });
+                }
 
                 container.appendChild(card);
             });
         }
     });
+}
+
+function obterLinkCompra(item) {
+    const link = (item.Link || item.URL || item.Url || item.Site || '').trim();
+    if (!link) return '';
+
+    try {
+        const url = new URL(link);
+        return url.protocol === 'http:' || url.protocol === 'https:' ? url.href : '';
+    } catch (error) {
+        return '';
+    }
+}
+
+function escaparHtml(valor) {
+    return String(valor ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
 }
 
 function carregarComentarios() {

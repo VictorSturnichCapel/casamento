@@ -5,9 +5,10 @@ Este é o site oficial para o casamento de Ana & Victor. O projeto é um site es
 ## 🚀 Funcionalidades
 
 * **Contagem Regressiva:** Cronômetro dinâmico para o dia da festa e contador de tempo de relacionamento.
-* **Lista de Presentes (Pix):**
+* **Lista de Presentes:**
     * Carrega a lista de presentes via planilha do Google (CSV).
-    * **Gerador de Pix Automático:** Cria o QR Code e o código "Copia e Cola" instantaneamente no navegador (sem backend), calculado com base no valor do presente.
+    * Itens com uma URL na coluna `Link` exibem um botão para compra no site externo.
+    * Itens sem link usam o **Gerador de Pix Automático**, que cria o QR Code e o código "Copia e Cola" instantaneamente no navegador (sem backend), calculado com base no valor do presente.
     * Botão de envio de comprovante via WhatsApp.
 * **RSVP (Confirmação de Presença):** Formulário integrado que envia os dados diretamente para uma aba da planilha.
 * **Mural de Recados:** Espaço para convidados deixarem mensagens, que são exibidas dinamicamente após aprovação/envio.
