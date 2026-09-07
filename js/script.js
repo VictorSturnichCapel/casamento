@@ -75,6 +75,14 @@ function inicializarContadores() {
     atualizar();
 }
 
+function enviarParaGoogle(formulario) {
+    return fetch(google.scriptURL, {
+        method: 'POST',
+        mode: 'no-cors',
+        body: new FormData(formulario)
+    });
+}
+
 // === FORMULÁRIOS ===
 function configurarFormularios() {
     // RSVP
@@ -87,7 +95,7 @@ function configurarFormularios() {
         btnRsvp.disabled = true; 
         btnRsvp.innerText = "Enviando...";
         
-        fetch(google.scriptURL, { method: 'POST', body: new FormData(formRsvp)})
+        enviarParaGoogle(formRsvp)
             .then(() => {
                 msgRsvp.style.display = "block";
                 msgRsvp.innerText = "Presença confirmada com sucesso! Obrigado.";
@@ -109,7 +117,7 @@ function configurarFormularios() {
         btnMsg.innerText = "Enviando..."; 
         statusMsg.style.display = "none";
         
-        fetch(google.scriptURL, { method: 'POST', body: new FormData(formMsg)})
+        enviarParaGoogle(formMsg)
             .then(() => {
                 statusMsg.style.display = "block";
                 statusMsg.style.color = "green";
@@ -136,7 +144,7 @@ function configurarFormularios() {
         btnPresenteLoja.innerText = "Enviando...";
         msgPresenteLoja.style.display = "none";
 
-        fetch(google.scriptURL, { method: 'POST', body: new FormData(formPresenteLoja) })
+        enviarParaGoogle(formPresenteLoja)
             .then(() => {
                 msgPresenteLoja.style.display = "block";
                 msgPresenteLoja.style.color = "green";
