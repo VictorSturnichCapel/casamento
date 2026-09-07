@@ -170,10 +170,17 @@ function carregarPresentes() {
         header: true,
         skipEmptyLines: true,
         complete: function(results) {
-            const container = document.getElementById('lista-presentes');
+            const containers = {
+                loja: document.getElementById('lista-presentes-loja'),
+                pix: document.getElementById('lista-presentes-pix')
+            };
             const loader = document.getElementById('loading-presentes');
             const selectPresente = document.getElementById('presente-comprado');
             if(loader) loader.style.display = 'none';
+
+            Object.values(containers).forEach(container => {
+                if (container) container.innerHTML = '';
+            });
 
             if (selectPresente) {
                 selectPresente.innerHTML = '<option value="">Selecione o presente comprado</option>';
@@ -215,7 +222,8 @@ function carregarPresentes() {
                     });
                 }
 
-                container.appendChild(card);
+                const categoria = linkCompra ? 'loja' : 'pix';
+                containers[categoria].appendChild(card);
 
                 if (selectPresente) {
                     const option = document.createElement('option');
@@ -225,12 +233,32 @@ function carregarPresentes() {
                 }
             });
 
+            configurarBotaoVerMais(containers.loja, document.getElementById('btn-mais-loja'));
+            configurarBotaoVerMais(containers.pix, document.getElementById('btn-mais-pix'));
+
             if (selectPresente && selectPresente.options.length === 1) {
                 selectPresente.innerHTML = '<option value="">Nenhum presente disponível no momento</option>';
                 selectPresente.disabled = true;
             }
         }
     });
+}
+
+function configurarBotaoVerMais(container, botao) {
+    if (!container || !botao) return;
+
+    const cards = Array.from(container.children);
+    const quantidadeInicial = 3;
+    botao.hidden = cards.length <= quantidadeInicial;
+    botao.innerText = 'Ver mais presentes';
+
+    cards.slice(quantidadeInicial).forEach(card => card.classList.add('card-oculto'));
+    botao.onclick = () => {
+        const expandido = botao.dataset.expandido === 'true';
+        cards.slice(quantidadeInicial).forEach(card => card.classList.toggle('card-oculto', expandido));
+        botao.dataset.expandido = String(!expandido);
+        botao.innerText = expandido ? 'Ver mais presentes' : 'Ver menos';
+    };
 }
 
 function obterCotas(valor) {

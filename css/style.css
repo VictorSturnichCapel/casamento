@@ -105,6 +105,41 @@ p.intro {
     margin-bottom: 60px;
 }
 
+.presentes-grupo {
+    margin-bottom: 45px;
+}
+
+.presentes-subtitle {
+    color: #777;
+    font-size: 1.25rem;
+    margin: 0 0 20px;
+}
+
+.presentes-grid {
+    margin-bottom: 18px;
+}
+
+.card-oculto {
+    display: none;
+}
+
+.btn-ver-mais {
+    border: 1px solid var(--cor-btn-form);
+    background: transparent;
+    color: var(--cor-btn-form);
+    border-radius: 5px;
+    cursor: pointer;
+    display: block;
+    font-weight: 600;
+    margin: 0 auto;
+    padding: 10px 18px;
+}
+
+.btn-ver-mais:hover {
+    background: var(--cor-btn-form);
+    color: white;
+}
+
 .card {
     background: white;
     border-radius: 15px;

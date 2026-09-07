@@ -76,7 +76,17 @@
 
         <h2 class="section-title text-center">Lista de Presentes 🎁</h2>
         <div id="loading-presentes" class="loading-msg">Carregando lista...</div>
-        <div class="grid" id="lista-presentes"></div>
+        <section class="presentes-grupo" aria-labelledby="titulo-presentes-loja">
+            <h3 id="titulo-presentes-loja" class="presentes-subtitle">Presentes para comprar na loja</h3>
+            <div class="grid presentes-grid" id="lista-presentes-loja"></div>
+            <button type="button" class="btn-ver-mais" id="btn-mais-loja" hidden>Ver mais presentes</button>
+        </section>
+
+        <section class="presentes-grupo" aria-labelledby="titulo-presentes-pix">
+            <h3 id="titulo-presentes-pix" class="presentes-subtitle">Presentes via Pix</h3>
+            <div class="grid presentes-grid" id="lista-presentes-pix"></div>
+            <button type="button" class="btn-ver-mais" id="btn-mais-pix" hidden>Ver mais presentes</button>
+        </section>
 
         <div style="max-width: 800px; margin: 0 auto 50px; padding: 0 20px;">
             <h2 class="section-title text-center mt-0">Vibe da Festa 🎵</h2>
