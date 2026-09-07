@@ -53,6 +53,7 @@ class PixGenerator {
 // === LÓGICA DE INTERFACE ===
 
 document.addEventListener('DOMContentLoaded', () => {
+    configurarIntro();
     inicializarContadores();
     carregarPresentes();
     carregarComentarios();
@@ -73,6 +74,28 @@ function inicializarContadores() {
         document.getElementById('tempo-festa').innerText = difFesta > 0 ? `Faltam ${difFesta} dias!` : "É hoje! 🎉";
     }
     atualizar();
+}
+
+function configurarIntro() {
+    const intro = document.getElementById('intro-sequencia');
+    const video = intro?.querySelector('.intro-video');
+    const fonte = video?.querySelector('source[data-src]');
+
+    if (window.matchMedia('(max-width: 600px)').matches) {
+        document.body.style.overflow = 'auto';
+        intro?.remove();
+        return;
+    }
+
+    if (fonte) {
+        fonte.src = fonte.dataset.src;
+        video.load();
+    }
+
+    setTimeout(() => {
+        document.body.style.overflow = 'auto';
+        intro?.remove();
+    }, 17000);
 }
 
 function enviarParaGoogle(formulario) {
@@ -368,17 +391,3 @@ function abrirModalPix(item, valorStr) {
 
     modal.style.display = "flex";
 }
-
-// Tempo total da introdução em milissegundos (16s da animação + 1s do fade out)
-    const tempoDaIntro = 17000; 
-
-  setTimeout(() => {
-    // Restaura o scroll do site principal
-    document.body.style.overflow = 'auto';
-    
-    // Remove a camada de introdução completamente
-    const intro = document.getElementById('intro-sequencia');
-    if (intro) {
-      intro.remove();
-    }
-  }, tempoDaIntro);
