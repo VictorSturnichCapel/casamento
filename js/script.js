@@ -125,6 +125,34 @@ function configurarFormularios() {
                 btnMsg.disabled = false; 
             });
     });
+
+    const formPresenteLoja = document.forms['form-presente-loja'];
+    const btnPresenteLoja = document.getElementById('btn-presente-loja');
+    const msgPresenteLoja = document.getElementById('msg-presente-loja');
+
+    formPresenteLoja.addEventListener('submit', e => {
+        e.preventDefault();
+        btnPresenteLoja.disabled = true;
+        btnPresenteLoja.innerText = "Enviando...";
+        msgPresenteLoja.style.display = "none";
+
+        fetch(google.scriptURL, { method: 'POST', body: new FormData(formPresenteLoja) })
+            .then(() => {
+                msgPresenteLoja.style.display = "block";
+                msgPresenteLoja.style.color = "green";
+                msgPresenteLoja.innerText = "Presente confirmado com sucesso! Obrigado. ❤️";
+                formPresenteLoja.reset();
+                btnPresenteLoja.disabled = false;
+                btnPresenteLoja.innerText = "Enviar Confirmação";
+            })
+            .catch(() => {
+                msgPresenteLoja.style.display = "block";
+                msgPresenteLoja.style.color = "#b00020";
+                msgPresenteLoja.innerText = "Não foi possível enviar. Tente novamente.";
+                btnPresenteLoja.disabled = false;
+                btnPresenteLoja.innerText = "Enviar Confirmação";
+            });
+    });
 }
 
 // === GOOGLE SHEETS (PAPA PARSE) ===
@@ -136,14 +164,21 @@ function carregarPresentes() {
         complete: function(results) {
             const container = document.getElementById('lista-presentes');
             const loader = document.getElementById('loading-presentes');
+            const selectPresente = document.getElementById('presente-comprado');
             if(loader) loader.style.display = 'none';
+
+            if (selectPresente) {
+                selectPresente.innerHTML = '<option value="">Selecione o presente comprado</option>';
+            }
 
             results.data.forEach(item => {
                 if (!item.Item) return;
+
+                const cotasNumericas = obterCotas(item.Cotas);
+                if (cotasNumericas === 0) return;
                 
                 let foto = item.Foto && item.Foto.startsWith('http') ? item.Foto : 'https://images.unsplash.com/photo-1513201099705-a9746e1e201f?auto=format&fit=crop&w=500&q=60';
                 let cotas = item.Cotas ? `${item.Cotas} cotas` : "Disponível";
-                if (item.Cotas === "0") cotas = "Esgotado";
                 const linkCompra = obterLinkCompra(item);
                 const acao = linkCompra
                     ? `<a class="btn-zap js-link-compra" href="${escaparHtml(linkCompra)}" target="_blank" rel="noopener noreferrer">🛒 Comprar presente</a>`
@@ -173,9 +208,27 @@ function carregarPresentes() {
                 }
 
                 container.appendChild(card);
+
+                if (selectPresente) {
+                    const option = document.createElement('option');
+                    option.value = item.Item;
+                    option.textContent = item.Item;
+                    selectPresente.appendChild(option);
+                }
             });
+
+            if (selectPresente && selectPresente.options.length === 1) {
+                selectPresente.innerHTML = '<option value="">Nenhum presente disponível no momento</option>';
+                selectPresente.disabled = true;
+            }
         }
     });
+}
+
+function obterCotas(valor) {
+    if (valor === undefined || valor === null || String(valor).trim() === '') return null;
+    const cotas = Number(String(valor).replace(',', '.').trim());
+    return Number.isFinite(cotas) ? cotas : null;
 }
 
 function obterLinkCompra(item) {

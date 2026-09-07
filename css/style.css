@@ -201,6 +201,7 @@ p.intro {
 }
 
 .form-rsvp-border { border-left: 5px solid var(--cor-titulo); }
+.form-gift-border { border-left: 5px solid var(--cor-botao); }
 
 .form-box {
     background: #fdfdfd;

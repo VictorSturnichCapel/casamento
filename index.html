@@ -138,6 +138,26 @@
             <p id="msg-rsvp" style="display:none; text-align:center; margin-top:15px; font-weight:bold; color:green;"></p>
             
         </div>
+
+        <div class="form-section form-gift-border">
+            <h2 class="section-title text-center mt-0">Confirmar Presente da Loja 🎁</h2>
+            <p class="text-center mb-30 color-gray">Comprou um dos presentes da lista? Avise a gente para reservar a cota.</p>
+
+            <form name="form-presente-loja">
+                <input type="hidden" name="tipo" value="PresenteLoja">
+
+                <label style="font-weight:bold;">Seu nome:</label>
+                <input name="Nome" type="text" placeholder="Ex: João e Maria" required>
+
+                <label style="font-weight:bold;">Presente comprado:</label>
+                <select name="Item" id="presente-comprado" required>
+                    <option value="">Carregando presentes disponíveis...</option>
+                </select>
+
+                <button type="submit" class="btn-post" id="btn-presente-loja">Enviar Confirmação</button>
+            </form>
+            <p id="msg-presente-loja" style="display:none; text-align:center; margin-top:15px; font-weight:bold;"></p>
+        </div>
     </div>
     
     <div class="pix-section">

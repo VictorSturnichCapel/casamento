@@ -11,6 +11,7 @@ Este é o site oficial para o casamento de Ana & Victor. O projeto é um site es
     * Itens sem link usam o **Gerador de Pix Automático**, que cria o QR Code e o código "Copia e Cola" instantaneamente no navegador (sem backend), calculado com base no valor do presente.
     * Botão de envio de comprovante via WhatsApp.
 * **RSVP (Confirmação de Presença):** Formulário integrado que envia os dados diretamente para uma aba da planilha.
+* **Confirmação de presentes da loja:** Formulário integrado que envia `tipo=PresenteLoja`, `Nome` e `Item` para o Google Apps Script. Itens com `Cotas` igual a `0` deixam de aparecer.
 * **Mural de Recados:** Espaço para convidados deixarem mensagens, que são exibidas dinamicamente após aprovação/envio.
 * **Vibe da Festa:** Integração com Spotify para dar o tom do evento.
 
